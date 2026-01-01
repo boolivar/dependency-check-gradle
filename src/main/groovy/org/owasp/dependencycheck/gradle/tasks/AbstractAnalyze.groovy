@@ -89,7 +89,7 @@ abstract class AbstractAnalyze extends ConfiguredTask {
 
     @Inject
     AbstractAnalyze(ObjectFactory objects) {
-        outputDir = objects.directoryProperty().convention(config.outputDirectory)
+        outputDir = objects.directoryProperty().convention(extension.outputDirectory)
     }
 
     /**

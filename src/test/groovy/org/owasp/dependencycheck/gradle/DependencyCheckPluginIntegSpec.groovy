@@ -118,4 +118,62 @@ class DependencyCheckPluginIntegSpec extends Specification {
         then:
         result.task(":$DependencyCheckPlugin.ANALYZE_TASK").outcome == SUCCESS
     }
+
+    def "mulitple Analyze task configured"() {
+        given:
+        fileSystemFixture.create {
+            dir("tasks") {
+                file("build.gradle").text = """
+                    plugins {
+                        id 'org.owasp.dependencycheck'
+                    }
+
+                    dependencyCheck {
+                        analyzers.ossIndex.enabled = false
+                        nvd.datafeedUrl = 'https://dependency-check.github.io/DependencyCheck/hb_nvd/'
+                        failBuildOnCVSS = 2.5
+                        junitFailOnCVSS = 3.5
+                    }
+
+                    tasks.named('dependencyCheckAnalyze') {
+                        config {
+                            failBuildOnCVSS = 4.5f
+                            settings.put('junit.fail.on.cvss', 5.5)
+                        }
+                        doLast {
+                            assert config.failBuildOnCVSS.get() == 4.5f
+                            assert settings.getFloat('junit.fail.on.cvss', 0) == 5.5f
+                            assert settings.getString('nvd.api.datafeed.url') == 'https://dependency-check.github.io/DependencyCheck/hb_nvd/'
+                        }
+                    }
+
+                    tasks.register('testAnalyze', org.owasp.dependencycheck.gradle.tasks.Analyze) {
+                        doLast {
+                            assert config.failBuildOnCVSS.get() == 2.5f
+                            assert settings.getFloat('junit.fail.on.cvss', 0) == 3.5f
+                            assert settings.getString('nvd.api.datafeed.url') == 'https://dependency-check.github.io/DependencyCheck/hb_nvd/'
+                        }
+                    }
+
+                    tasks.register('check') {
+                        dependsOn tasks.withType(org.owasp.dependencycheck.gradle.tasks.Analyze)
+                    }
+                """.stripIndent()
+            }
+        }
+
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(fileSystemFixture.resolve("tasks").toFile())
+                .withArguments("check")
+                .withPluginClasspath()
+                .withDebug(true)
+                .forwardOutput()
+                .build()
+
+        then:
+        result.task(":$DependencyCheckPlugin.ANALYZE_TASK").outcome == SUCCESS
+        result.task(":testAnalyze").outcome == SUCCESS
+        result.task(":check").outcome == SUCCESS
+    }
 }

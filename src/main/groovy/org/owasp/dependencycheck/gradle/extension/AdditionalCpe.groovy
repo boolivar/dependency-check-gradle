@@ -4,6 +4,7 @@ import org.gradle.api.Named
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 
 import javax.inject.Inject
@@ -28,6 +29,7 @@ class AdditionalCpe implements Named {
     /**
      * Name assigned to the CPE entry during configuration.
      */
+    @Internal
     @Override
     String getName() {
         return name
