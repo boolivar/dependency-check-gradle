@@ -137,20 +137,20 @@ class DependencyCheckPluginIntegSpec extends Specification {
 
                     tasks.named('dependencyCheckAnalyze') {
                         config {
-                            failBuildOnCVSS = 4.5f
+                            failBuildOnCVSS = 4.5
                             settings.put('junit.fail.on.cvss', 5.5)
                         }
                         doLast {
-                            assert config.failBuildOnCVSS.get() == 4.5f
-                            assert settings.getFloat('junit.fail.on.cvss', 0) == 5.5f
+                            assert config.failBuildOnCVSS.get() == 4.5
+                            assert settings.getFloat('junit.fail.on.cvss', 0) == 5.5
                             assert settings.getString('nvd.api.datafeed.url') == 'https://dependency-check.github.io/DependencyCheck/hb_nvd/'
                         }
                     }
 
                     tasks.register('testAnalyze', org.owasp.dependencycheck.gradle.tasks.Analyze) {
                         doLast {
-                            assert config.failBuildOnCVSS.get() == 2.5f
-                            assert settings.getFloat('junit.fail.on.cvss', 0) == 3.5f
+                            assert config.failBuildOnCVSS.get() == 2.5
+                            assert settings.getFloat('junit.fail.on.cvss', 0) == 3.5
                             assert settings.getString('nvd.api.datafeed.url') == 'https://dependency-check.github.io/DependencyCheck/hb_nvd/'
                         }
                     }

@@ -36,7 +36,7 @@ abstract class AnalyzeTaskConfig {
     @Input
     abstract Property<Boolean> getShowSummary()
     @Input
-    abstract Property<Float> getFailBuildOnCVSS()
+    abstract Property<Number> getFailBuildOnCVSS()
     @Input
     abstract ListProperty<String> getSkipGroups()
     @Input
