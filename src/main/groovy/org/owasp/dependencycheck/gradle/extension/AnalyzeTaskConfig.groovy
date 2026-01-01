@@ -9,6 +9,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
+import org.gradle.api.tasks.Optional
 
 abstract class AnalyzeTaskConfig {
     @Input
@@ -17,6 +18,7 @@ abstract class AnalyzeTaskConfig {
     abstract ListProperty<String> getAnalyzedTypes()
     @Input
     abstract Property<Boolean> getFailOnError()
+    @Optional
     @Input
     abstract Property<String> getFormat()
     @Input
