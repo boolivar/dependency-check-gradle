@@ -174,7 +174,6 @@ abstract class ConfiguredTask extends DefaultTask {
         settings.put(ANALYZER_NUSPEC_ENABLED, config.analyzers.nuspecEnabled.getOrNull())
         settings.put(ANALYZER_OSSINDEX_ENABLED, select(config.analyzers.ossIndex.enabled.getOrNull(), config.analyzers.ossIndexEnabled.getOrNull()))
         settings.put(ANALYZER_OSSINDEX_WARN_ONLY_ON_REMOTE_ERRORS, config.analyzers.ossIndex.warnOnlyOnRemoteErrors.getOrNull())
-        settings.put(ANALYZER_OSSINDEX_ENABLED, config.analyzers.ossIndex.enabled.getOrNull())
         settings.put(ANALYZER_OSSINDEX_USER, config.analyzers.ossIndex.username.getOrNull() ?: null)
         settings.put(ANALYZER_OSSINDEX_PASSWORD, config.analyzers.ossIndex.password.getOrNull() ?: null)
         settings.put(ANALYZER_OSSINDEX_URL, config.analyzers.ossIndex.url.getOrNull() ?: null)
