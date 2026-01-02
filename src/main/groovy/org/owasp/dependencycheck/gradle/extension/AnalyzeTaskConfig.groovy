@@ -3,7 +3,6 @@ package org.owasp.dependencycheck.gradle.extension
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.ListProperty
-import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -11,7 +10,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 
-abstract class AnalyzeTaskConfig {
+abstract class AnalyzeTaskConfig implements DependencyCheckTaskConfig {
     /**
      * If set to true dependency-check analysis will be skipped.
      */
@@ -22,11 +21,6 @@ abstract class AnalyzeTaskConfig {
      */
     @Input
     abstract ListProperty<String> getAnalyzedTypes()
-    /**
-     * Fails the build if an error occurs during the dependency-check analysis.
-     */
-    @Input
-    abstract Property<Boolean> getFailOnError()
     /**
      * The report format to be generated (HTML, XML, CSV, JSON, JUNIT, SARIF, JENKINS, GITLAB, ALL).
      */
@@ -105,13 +99,6 @@ abstract class AnalyzeTaskConfig {
      */
     @Nested
     abstract NamedDomainObjectContainer<AdditionalCpe> getAdditionalCpes()
-    /**
-     * Dependencycheck Engine settings.
-     * List of supported keys: {@link org.owasp.dependencycheck.utils.Settings.KEYS}
-     * @see org.owasp.dependencycheck.utils.Settings
-     */
-    @Input
-    abstract MapProperty<String, Object> getSettings()
     @Internal
     boolean isScanSetConfigured() {
         !scanSet.empty

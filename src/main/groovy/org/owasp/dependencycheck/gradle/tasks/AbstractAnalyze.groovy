@@ -20,6 +20,8 @@ package org.owasp.dependencycheck.gradle.tasks
 
 import com.github.packageurl.PackageURL
 import com.github.packageurl.PackageURLBuilder
+
+import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -36,6 +38,7 @@ import org.gradle.api.attributes.Attribute
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.maven.MavenModule
@@ -52,6 +55,7 @@ import org.owasp.dependencycheck.dependency.Vulnerability
 import org.owasp.dependencycheck.dependency.naming.CpeIdentifier
 import org.owasp.dependencycheck.exception.ExceptionCollection
 import org.owasp.dependencycheck.exception.ReportException
+import org.owasp.dependencycheck.gradle.extension.AnalyzeTaskConfig
 import org.owasp.dependencycheck.gradle.service.SlackNotificationSenderService
 import org.owasp.dependencycheck.utils.Checksum
 import org.owasp.dependencycheck.utils.SeverityUtil
@@ -89,7 +93,34 @@ abstract class AbstractAnalyze extends ConfiguredTask {
 
     @Inject
     AbstractAnalyze(ObjectFactory objects) {
+        super(AnalyzeTaskConfig)
+        config.skip.set(extension.skip)
+        config.analyzedTypes.set(extension.analyzedTypes)
+        config.format.set(extension.format)
+        config.formats.set(extension.formats)
+        config.scanBuildEnv.set(extension.scanBuildEnv)
+        config.scanDependencies.set(extension.scanDependencies)
+        config.scanConfigurations.set(extension.scanConfigurations)
+        config.skipConfigurations.set(extension.skipConfigurations)
+        config.scanProjects.set(extension.scanProjects)
+        config.skipProjects.set(extension.skipProjects)
+        config.showSummary.set(extension.showSummary)
+        config.failBuildOnCVSS.set(extension.failBuildOnCVSS)
+        config.skipGroups.set(extension.skipGroups)
+        config.skipTestGroups.set(extension.skipTestGroups)
+        config.scanSet.from(extension.scanSet)
+        config.additionalCpes.addAll(extension.additionalCpes)
         outputDir = objects.directoryProperty().convention(extension.outputDirectory)
+    }
+
+    @Nested
+    @Override
+    AnalyzeTaskConfig getConfig() {
+        (AnalyzeTaskConfig) super.config
+    }
+
+    def config(Action<? super AnalyzeTaskConfig> action) {
+        action.execute(config)
     }
 
     /**

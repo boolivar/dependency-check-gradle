@@ -19,11 +19,13 @@
 package org.owasp.dependencycheck.gradle.tasks
 
 
+import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import org.owasp.dependencycheck.Engine
 import org.owasp.dependencycheck.data.nvdcve.DatabaseException
 import org.owasp.dependencycheck.data.update.exception.UpdateException
+import org.owasp.dependencycheck.gradle.extension.DependencyCheckTaskConfig
 
 import static org.owasp.dependencycheck.utils.Settings.KEYS.AUTO_UPDATE
 
@@ -41,6 +43,10 @@ class Update extends ConfiguredTask {
     Update() {
         group = 'OWASP dependency-check'
         description = 'Downloads and stores updates from the NVD CVE data feeds.'
+    }
+
+    def config(Action<? super DependencyCheckTaskConfig> action) {
+        action.execute(config)
     }
 
     /**

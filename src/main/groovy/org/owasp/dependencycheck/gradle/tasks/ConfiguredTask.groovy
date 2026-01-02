@@ -18,15 +18,12 @@
 
 package org.owasp.dependencycheck.gradle.tasks
 
-import com.google.common.base.Strings
-import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
-import org.gradle.api.provider.MapProperty
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
-import org.owasp.dependencycheck.gradle.extension.AnalyzeTaskConfig
 import org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension
+import org.owasp.dependencycheck.gradle.extension.DependencyCheckTaskConfig
 import org.owasp.dependencycheck.gradle.service.SlackNotificationSenderService
 import org.owasp.dependencycheck.utils.Downloader
 import org.owasp.dependencycheck.utils.Settings
@@ -41,8 +38,7 @@ import static org.owasp.dependencycheck.utils.Settings.KEYS.*
 @groovy.transform.CompileStatic
 abstract class ConfiguredTask extends DefaultTask {
 
-    @Nested
-    final AnalyzeTaskConfig config = project.objects.newInstance(AnalyzeTaskConfig)
+    private final DependencyCheckTaskConfig config
     @Internal
     final DependencyCheckExtension extension = (DependencyCheckExtension) project.extensions.findByName('dependencyCheck')
     @Internal
@@ -51,35 +47,25 @@ abstract class ConfiguredTask extends DefaultTask {
     String PROPERTIES_FILE = 'task.properties'
 
     ConfiguredTask() {
-        config.skip.set(extension.skip)
-        config.analyzedTypes.set(extension.analyzedTypes)
-        config.failOnError.set(extension.failOnError)
-        config.format.set(extension.format)
-        config.formats.set(extension.formats)
-        config.scanBuildEnv.set(extension.scanBuildEnv)
-        config.scanDependencies.set(extension.scanDependencies)
-        config.scanConfigurations.set(extension.scanConfigurations)
-        config.skipConfigurations.set(extension.skipConfigurations)
-        config.scanProjects.set(extension.scanProjects)
-        config.skipProjects.set(extension.skipProjects)
-        config.showSummary.set(extension.showSummary)
-        config.failBuildOnCVSS.set(extension.failBuildOnCVSS)
-        config.skipGroups.set(extension.skipGroups)
-        config.skipTestGroups.set(extension.skipTestGroups)
-        config.scanSet.from(extension.scanSet)
-        config.additionalCpes.addAll(extension.additionalCpes)
-        config.settings.value(settingsMap(extension))
+        this(DependencyCheckTaskConfig)
     }
 
-    def config(Action<? super AnalyzeTaskConfig> action) {
-        action.execute(config)
+    ConfiguredTask(Class<? extends DependencyCheckTaskConfig> configType) {
+        this.config = project.objects.newInstance(configType)
+        this.config.failOnError.set(extension.failOnError)
+        this.config.settings.value(settingsMap(extension))
+    }
+
+    @Nested
+    DependencyCheckTaskConfig getConfig() {
+        config
     }
 
     /**
      * Initializes the settings object. If the setting is not set the
      * default from dependency-check-core is used.
      */
-    void initializeSettings() {
+    protected void initializeSettings() {
         settings = new Settings()
 
         InputStream taskProperties = null
