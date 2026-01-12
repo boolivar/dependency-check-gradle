@@ -223,7 +223,6 @@ class DependencyCheckGradlePluginSpec extends Specification {
 
     def 'NexusExtension properties configure task settings'() {
         given:
-        def task = project.tasks.findByName(taskName)
         with(project.dependencyCheck.analyzers.nexus) {
             enabled.set(true)
             usesProxy.set(true)
@@ -231,6 +230,7 @@ class DependencyCheckGradlePluginSpec extends Specification {
             username.set('user')
             password.set('pass')
         }
+        def task = project.tasks.findByName(taskName)
 
         when:
         task.initializeSettings()
