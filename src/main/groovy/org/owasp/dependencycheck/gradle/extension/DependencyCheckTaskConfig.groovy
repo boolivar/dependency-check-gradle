@@ -16,5 +16,5 @@ interface DependencyCheckTaskConfig {
      * @see org.owasp.dependencycheck.utils.Settings
      */
     @Input
-    MapProperty<String, Object> getSettings()
+    abstract MapProperty<String, Object> getSettings()
 }

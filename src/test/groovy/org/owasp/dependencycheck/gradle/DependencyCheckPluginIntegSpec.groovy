@@ -119,7 +119,7 @@ class DependencyCheckPluginIntegSpec extends Specification {
         result.task(":$DependencyCheckPlugin.ANALYZE_TASK").outcome == SUCCESS
     }
 
-    def "mulitple Analyze task configured"() {
+    def "multiple Analyze task configured"() {
         given:
         fileSystemFixture.create {
             dir("tasks") {

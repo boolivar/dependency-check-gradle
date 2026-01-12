@@ -85,7 +85,7 @@ abstract class AnalyzeTaskConfig implements DependencyCheckTaskConfig {
     @Input
     abstract ListProperty<String> getSkipGroups()
     /**
-     * When set to true all dependency groups that being with 'test' will be skipped.
+     * When set to true all dependency groups that begin with 'test' will be skipped.
      */
     @Input
     abstract Property<Boolean> getSkipTestGroups()
