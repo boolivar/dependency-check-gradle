@@ -170,6 +170,7 @@ abstract class ConfiguredTask extends DefaultTask {
                 throw new InvalidUserDataException('Invalid setting: `validForHours` must be 0 or greater')
             }
         }
+
         settings.put(ANALYZER_JAR_ENABLED, config.analyzers.jarEnabled.getOrNull())
         settings.put(ANALYZER_NUSPEC_ENABLED, config.analyzers.nuspecEnabled.getOrNull())
         settings.put(ANALYZER_OSSINDEX_ENABLED, select(config.analyzers.ossIndex.enabled.getOrNull(), config.analyzers.ossIndexEnabled.getOrNull()))
@@ -183,6 +184,8 @@ abstract class ConfiguredTask extends DefaultTask {
         settings.put(ANALYZER_NEXUS_ENABLED, config.analyzers.nexusEnabled.getOrNull())
         settings.put(ANALYZER_NEXUS_URL, config.analyzers.nexusUrl.getOrNull() ?: null)
         settings.put(ANALYZER_NEXUS_USES_PROXY, config.analyzers.nexusUsesProxy.getOrNull())
+        settings.put(ANALYZER_NEXUS_USER, config.analyzers.nexus.username.getOrNull())
+        settings.put(ANALYZER_NEXUS_PASSWORD, config.analyzers.nexus.password.getOrNull())
 
         settings.put(ANALYZER_EXPERIMENTAL_ENABLED, config.analyzers.experimentalEnabled.getOrNull())
         settings.put(ANALYZER_ARCHIVE_ENABLED, config.analyzers.archiveEnabled.getOrNull())
